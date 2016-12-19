@@ -346,7 +346,7 @@ const Image = React.createClass({
  
 		if (imageURL.match(/^http:\/\/.+\..+/i)) {
 			return source;
-		}else {
+		}else if (imageURL.indexOf('//') < 0){
 			var strArray = imageURL.split('/');
 			for (let i = 0; i < strArray.length; i++) {
         if(strArray[i] === '.' || strArray[i] === "..") {continue;}
@@ -354,26 +354,24 @@ const Image = React.createClass({
 			}
       source.uri = scriptURL;
 			return source;
-		}
+		}else {return source}
 	},
 
   render: function() {
     let lastSource = this.getImageURL(this.props.source);
     const source = resolveAssetSource(lastSource) || { uri: undefined, width: undefined, height: undefined };
-    console.log(source);
+    //console.log(source);
 
     let sources;
     let style;
     if (Array.isArray(source)) {
       style = flattenStyle([styles.base, this.props.style]) || {};
       sources = source;
-      console.log(' array ------: ', source);
     } else {
       const {width, height, uri} = source;
       style = flattenStyle([{width, height}, styles.base, this.props.style]) || {};
       sources = [source];
-
-      console.log(' not array ------: ');
+      
       if (uri === '') {
         console.warn('source.uri should not be an empty string');
       }

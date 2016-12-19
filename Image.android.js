@@ -266,21 +266,21 @@ var Image = React.createClass({
     if (!source || !source.uri) return source;
     
     var imageURL = source.uri;
-		var scriptURL = SourceCode.scriptURL;
-		scriptURL = scriptURL.substring(0, scriptURL.lastIndexOf('/') + 1)+"assets/";
+    var scriptURL = SourceCode.scriptURL;
+    scriptURL = scriptURL.substring(0, scriptURL.lastIndexOf('/') + 1)+"assets/";
  
-		if (imageURL.match(/^http:\/\/.+\..+/i)) {
-			return source;
-		}else {
-			var strArray = imageURL.split('/');
-			for (let i = 0; i < strArray.length; i++) {
+    if (imageURL.match(/^http:\/\/.+\..+/i)) {
+      return source;
+    }else if (imageURL.indexOf('//') < 0){
+      var strArray = imageURL.split('/');
+      for (let i = 0; i < strArray.length; i++) {
         if(strArray[i] === '.' || strArray[i] === "..") {continue;}
-				i === strArray.length-1 ? scriptURL += strArray[i] : scriptURL += strArray[i] + '/';	
-			}
+        i === strArray.length-1 ? scriptURL += strArray[i] : scriptURL += strArray[i] + '/';  
+      }
       source.uri = scriptURL;
-			return source;
-		}
-	},
+      return source;
+    }else {return source}
+  },
 
   render: function() {
     var lastSource = getImageURL(this.props.source);
